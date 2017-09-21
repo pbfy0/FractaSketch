@@ -4,6 +4,7 @@
 #include "gui/checkbox.h"
 #include "utils.h"
 #include "constants.h"
+#include <algorithm>
 
 #include <algorithm>
 
@@ -53,7 +54,7 @@ Iter_Window::~Iter_Window() {
     }
     m_elements.clear();
 }
-#include <iostream> //DEBUGGING, REMOVE
+
 void Iter_Window::HandleEvents() {
     if(!m_window.isOpen())
         return;
@@ -78,47 +79,7 @@ void Iter_Window::HandleEvents() {
                 }
                 // Save button
                 if(m_elements[ITERATOR_LEVELS + 2]->IsClicked(event.mouseButton.x, event.mouseButton.y)) {
-                    sf::RenderTexture tex;
-                    tex.create(m_window.getSize().x, m_window.getSize().y);
-                    tex.clear(sf::Color::White);
-                    m_iterator.Draw(tex, m_drawPrevious.IsToggled());
-                    tex.display();
-
-                    sf::Image img = tex.getTexture().copyToImage();
-                    std::string filename = m_input.GetText();
-#ifdef _WIN32
-                    if (filename.size() == 0) {
-                        TCHAR fn[256];
-                        fn[0] = '\0';
-                        OPENFILENAME ofn = { 0 };
-                        ofn.lStructSize = sizeof(ofn);
-                        ofn.hwndOwner = m_window.getSystemHandle();
-                        ofn.lpstrFile = fn;
-                        ofn.nMaxFile = sizeof(fn) / sizeof(fn[0]);
-                        ofn.lpstrFilter = _T("PNG image (.png)\0*.png\0All Files\0*.*\0");
-                        ofn.nFilterIndex = 0;
-                        ofn.lpstrFileTitle = NULL;
-                        ofn.nMaxFileTitle = 0;
-                        ofn.lpstrInitialDir = NULL;
-                        ofn.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT;
-
-                        GetSaveFileName(&ofn);
-
-                        filename = sf::String(fn);
-                    }
-                    else {
-#endif
-                        filename = GetProperPath(filename);
-                        if (filename.length() < 4 || filename.substr(filename.length() - 4) != ".png")
-                            filename += ".png";
-#ifdef _WIN32
-                    }
-#endif
-
-                    if (img.saveToFile(filename))
-                        m_success.SetText("Image saved!");
-                    else
-                        m_success.SetText("Save failed :(");
+                    SaveImage();
                 }
                 if(m_input.IsClicked(event.mouseButton.x, event.mouseButton.y)) {
                     m_input.OnClick(event.mouseButton.x, event.mouseButton.y);
@@ -130,9 +91,13 @@ void Iter_Window::HandleEvents() {
             }
             break;
         case sf::Event::KeyPressed:
-            if(sf::Keyboard::Num0 < event.key.code &&
-               event.key.code <= sf::Keyboard::Num9 &&
-               !m_input.GetActive()) {
+            if(m_input.GetActive()) {
+                if(event.key.code == sf::Keyboard::Return) {
+                    SaveImage();
+                }
+                m_input.OnKeyPressed(event.key.code);
+            } else if(sf::Keyboard::Num0 < event.key.code &&
+                    event.key.code <= sf::Keyboard::Num9) {
                 UpdateLevel(event.key.code - sf::Keyboard::Num0);
             } else if(event.key.code == sf::Keyboard::Tilde) { // Level 0
                 UpdateLevel(0);
@@ -142,9 +107,6 @@ void Iter_Window::HandleEvents() {
                 UpdateLevel(std::max((int)m_currentLevel - 1, 0));
             } else if (event.key.code == sf::Keyboard::Right) {
                 UpdateLevel(std::min((int)m_currentLevel + 1, ITERATOR_LEVELS + 1));
-            }
-            else {
-                m_input.OnKeyPressed(event.key.code);
             }
             break;
         case sf::Event::TextEntered:
@@ -193,4 +155,48 @@ void Iter_Window::UpdateLevel(size_t newLevel) {
     m_currentLevel = newLevel;
     m_elements[m_currentLevel]->SetActive(true);
     m_iterator.SetLevel(m_currentLevel);
+}
+
+void Iter_Window::SaveImage() {
+    sf::RenderTexture tex;
+     tex.create(m_window.getSize().x, m_window.getSize().y);
+     tex.clear(sf::Color::White);
+     m_iterator.Draw(tex, m_drawPrevious.IsToggled());
+     tex.display();
+
+     sf::Image img = tex.getTexture().copyToImage();
+	 std::string filename = m_input.GetText();
+#ifdef _WIN32
+	 if (filename.size() == 0) {
+		 TCHAR fn[256];
+		 fn[0] = '\0';
+		 OPENFILENAME ofn = { 0 };
+		 ofn.lStructSize = sizeof(ofn);
+		 ofn.hwndOwner = m_window.getSystemHandle();
+		 ofn.lpstrFile = fn;
+		 ofn.nMaxFile = sizeof(fn) / sizeof(fn[0]);
+		 ofn.lpstrFilter = _T("PNG image (.png)\0*.png\0All Files\0*.*\0");
+		 ofn.nFilterIndex = 0;
+		 ofn.lpstrFileTitle = NULL;
+		 ofn.nMaxFileTitle = 0;
+		 ofn.lpstrInitialDir = NULL;
+		 ofn.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT;
+
+		 GetSaveFileName(&ofn);
+
+		 filename = sf::String(fn);
+	 }
+	 else {
+#endif
+		 filename = GetProperPath(filename);
+		 if (filename.length() < 4 || filename.substr(filename.length() - 4) != ".png")
+			 filename += ".png";
+#ifdef _WIN32
+	 }
+#endif
+
+     if (img.saveToFile(filename))
+        m_success.SetText("Image saved!");
+     else
+        m_success.SetText("Save failed :(");
 }
