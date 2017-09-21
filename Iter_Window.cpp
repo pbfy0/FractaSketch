@@ -8,6 +8,7 @@
 #include <algorithm>
 
 #ifdef _WIN32
+#include <tchar.h>
 #include <Windows.h>
 #endif
 
@@ -94,7 +95,7 @@ void Iter_Window::HandleEvents() {
                         ofn.hwndOwner = m_window.getSystemHandle();
                         ofn.lpstrFile = fn;
                         ofn.nMaxFile = sizeof(fn) / sizeof(fn[0]);
-                        ofn.lpstrFilter = "PNG image (.png)\0*.png\0All Files\0*.*\0";
+                        ofn.lpstrFilter = _T("PNG image (.png)\0*.png\0All Files\0*.*\0");
                         ofn.nFilterIndex = 0;
                         ofn.lpstrFileTitle = NULL;
                         ofn.nMaxFileTitle = 0;
@@ -103,7 +104,7 @@ void Iter_Window::HandleEvents() {
 
                         GetSaveFileName(&ofn);
 
-                        filename = fn;
+                        filename = sf::String(fn);
                     }
                     else {
 #endif

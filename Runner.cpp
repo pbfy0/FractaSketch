@@ -4,6 +4,7 @@
 #include "gui/text.h"
 
 #ifdef _WIN32
+#include <tchar.h>
 #include <Windows.h>
 #endif
 
@@ -117,7 +118,7 @@ void Runner::HandleEvents() {
                                 ofn.hwndOwner = m_window.getSystemHandle();
                                 ofn.lpstrFile = fn;
                                 ofn.nMaxFile = sizeof(fn) / sizeof(fn[0]);
-                                ofn.lpstrFilter = "FractaSketch file (.fsk)\0*.fsk\0All Files\0*.*\0";
+                                ofn.lpstrFilter = _T("FractaSketch file (.fsk)\0*.fsk\0All Files\0*.*\0");
                                 ofn.nFilterIndex = 0;
                                 ofn.lpstrFileTitle = NULL;
                                 ofn.nMaxFileTitle = 0;
@@ -126,7 +127,7 @@ void Runner::HandleEvents() {
 
                                 GetOpenFileName(&ofn);
 
-                                name = fn;
+                                name = sf::String(fn);
                             }
 #endif
                             if(m_base.LoadFromFile(name)) {
@@ -152,7 +153,7 @@ void Runner::HandleEvents() {
                                 ofn.hwndOwner = m_window.getSystemHandle();
                                 ofn.lpstrFile = fn;
                                 ofn.nMaxFile = sizeof(fn) / sizeof(fn[0]);
-                                ofn.lpstrFilter = "FractaSketch file (.fsk)\0*.fsk\0All Files\0*.*\0";
+                                ofn.lpstrFilter = _T("FractaSketch file (.fsk)\0*.fsk\0All Files\0*.*\0");
                                 ofn.nFilterIndex = 0;
                                 ofn.lpstrFileTitle = NULL;
                                 ofn.nMaxFileTitle = 0;
@@ -161,7 +162,7 @@ void Runner::HandleEvents() {
 
                                 GetSaveFileName(&ofn);
 
-                                name = fn;
+                                name = sf::String(fn);
                             }
 #endif
                             if(m_base.SaveToFile(name)) {
