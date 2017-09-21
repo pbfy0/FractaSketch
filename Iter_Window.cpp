@@ -165,34 +165,34 @@ void Iter_Window::SaveImage() {
      tex.display();
 
      sf::Image img = tex.getTexture().copyToImage();
-	 std::string filename = m_input.GetText();
+     std::string filename = m_input.GetText();
 #ifdef _WIN32
-	 if (filename.size() == 0) {
-		 TCHAR fn[256];
-		 fn[0] = '\0';
-		 OPENFILENAME ofn = { 0 };
-		 ofn.lStructSize = sizeof(ofn);
-		 ofn.hwndOwner = m_window.getSystemHandle();
-		 ofn.lpstrFile = fn;
-		 ofn.nMaxFile = sizeof(fn) / sizeof(fn[0]);
-		 ofn.lpstrFilter = _T("PNG image (.png)\0*.png\0All Files\0*.*\0");
-		 ofn.nFilterIndex = 0;
-		 ofn.lpstrFileTitle = NULL;
-		 ofn.nMaxFileTitle = 0;
-		 ofn.lpstrInitialDir = NULL;
-		 ofn.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT;
+     if (filename.size() == 0) {
+         TCHAR fn[256];
+         fn[0] = '\0';
+         OPENFILENAME ofn = { 0 };
+         ofn.lStructSize = sizeof(ofn);
+         ofn.hwndOwner = m_window.getSystemHandle();
+         ofn.lpstrFile = fn;
+         ofn.nMaxFile = sizeof(fn) / sizeof(fn[0]);
+         ofn.lpstrFilter = _T("PNG image (.png)\0*.png\0All Files\0*.*\0");
+         ofn.nFilterIndex = 0;
+         ofn.lpstrFileTitle = NULL;
+         ofn.nMaxFileTitle = 0;
+         ofn.lpstrInitialDir = NULL;
+         ofn.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT;
 
-		 GetSaveFileName(&ofn);
+         GetSaveFileName(&ofn);
 
-		 filename = sf::String(fn);
-	 }
-	 else {
+         filename = sf::String(fn);
+     }
+     else {
 #endif
-		 filename = GetProperPath(filename);
-		 if (filename.length() < 4 || filename.substr(filename.length() - 4) != ".png")
-			 filename += ".png";
+         filename = GetProperPath(filename);
+         if (filename.length() < 4 || filename.substr(filename.length() - 4) != ".png")
+             filename += ".png";
 #ifdef _WIN32
-	 }
+     }
 #endif
 
      if (img.saveToFile(filename))

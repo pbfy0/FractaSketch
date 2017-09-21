@@ -195,30 +195,30 @@ void Runner::UpdateLineType(int newTypeButton) {
 }
 
 void Runner::LoadFile() {
-	std::string name = m_elements[12]->GetText();
+    std::string name = m_elements[12]->GetText();
 #ifdef _WIN32
-	if (name.size() == 0) {
-		TCHAR fn[256];
-		fn[0] = '\0';
-		OPENFILENAME ofn = { 0 };
-		ofn.lStructSize = sizeof(ofn);
-		ofn.hwndOwner = m_window.getSystemHandle();
-		ofn.lpstrFile = fn;
-		ofn.nMaxFile = sizeof(fn) / sizeof(fn[0]);
-		ofn.lpstrFilter = _T("FractaSketch file (.fsk)\0*.fsk\0All Files\0*.*\0");
-		ofn.nFilterIndex = 0;
-		ofn.lpstrFileTitle = NULL;
-		ofn.nMaxFileTitle = 0;
-		ofn.lpstrInitialDir = NULL;
-		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+    if (name.size() == 0) {
+        TCHAR fn[256];
+        fn[0] = '\0';
+        OPENFILENAME ofn = { 0 };
+        ofn.lStructSize = sizeof(ofn);
+        ofn.hwndOwner = m_window.getSystemHandle();
+        ofn.lpstrFile = fn;
+        ofn.nMaxFile = sizeof(fn) / sizeof(fn[0]);
+        ofn.lpstrFilter = _T("FractaSketch file (.fsk)\0*.fsk\0All Files\0*.*\0");
+        ofn.nFilterIndex = 0;
+        ofn.lpstrFileTitle = NULL;
+        ofn.nMaxFileTitle = 0;
+        ofn.lpstrInitialDir = NULL;
+        ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
-		GetOpenFileName(&ofn);
+        GetOpenFileName(&ofn);
 
-		name = sf::String(fn);
-	}
+        name = sf::String(fn);
+    }
 #endif
-	if (m_base.LoadFromFile(name)) {
-		m_success.SetText("Load Successful!");
+    if (m_base.LoadFromFile(name)) {
+        m_success.SetText("Load Successful!");
         m_startedTemplate = true;
         m_finishedTemplate = true;
         m_drawingLine = false;
@@ -232,27 +232,27 @@ void Runner::LoadFile() {
 }
 
 void Runner::SaveFile() {
-	std::string name = m_elements[14]->GetText();
+    std::string name = m_elements[14]->GetText();
 #ifdef _WIN32
-	if (name.size() == 0) {
-		TCHAR fn[256];
-		fn[0] = '\0';
-		OPENFILENAME ofn = { 0 };
-		ofn.lStructSize = sizeof(ofn);
-		ofn.hwndOwner = m_window.getSystemHandle();
-		ofn.lpstrFile = fn;
-		ofn.nMaxFile = sizeof(fn) / sizeof(fn[0]);
-		ofn.lpstrFilter = _T("FractaSketch file (.fsk)\0*.fsk\0All Files\0*.*\0");
-		ofn.nFilterIndex = 0;
-		ofn.lpstrFileTitle = NULL;
-		ofn.nMaxFileTitle = 0;
-		ofn.lpstrInitialDir = NULL;
-		ofn.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT;
+    if (name.size() == 0) {
+        TCHAR fn[256];
+        fn[0] = '\0';
+        OPENFILENAME ofn = { 0 };
+        ofn.lStructSize = sizeof(ofn);
+        ofn.hwndOwner = m_window.getSystemHandle();
+        ofn.lpstrFile = fn;
+        ofn.nMaxFile = sizeof(fn) / sizeof(fn[0]);
+        ofn.lpstrFilter = _T("FractaSketch file (.fsk)\0*.fsk\0All Files\0*.*\0");
+        ofn.nFilterIndex = 0;
+        ofn.lpstrFileTitle = NULL;
+        ofn.nMaxFileTitle = 0;
+        ofn.lpstrInitialDir = NULL;
+        ofn.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT;
 
-		GetSaveFileName(&ofn);
+        GetSaveFileName(&ofn);
 
-		name = sf::String(fn);
-	}
+        name = sf::String(fn);
+    }
 #endif
     if(m_base.SaveToFile(name)) {
         m_success.SetText("Save Successful!");

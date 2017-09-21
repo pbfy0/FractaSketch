@@ -13,10 +13,19 @@ GUI_Element::GUI_Element(sf::RenderWindow* window, sf::Font* font, double x, dou
     m_cap("", *font),
     m_rectangle(sf::Vector2f(width, height))
 {
+#if (SFML_VERSION_MAJOR >= 2 && SFML_VERSION_MINOR >= 4)
     m_text.setFillColor(sf::Color::Black);
+#else
+    m_text.setColor(sf::Color::Black);
+#endif
+
     m_text.setCharacterSize(15);
 
+#if (SFML_VERSION_MAJOR >= 2 && SFML_VERSION_MINOR >= 4)
     m_cap.setFillColor(sf::Color::Black);
+#else
+    m_cap.setColor(sf::Color::Black);
+#endif
     m_cap.setCharacterSize(15);
 
     m_rectangle.setOutlineThickness(2);
