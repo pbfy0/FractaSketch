@@ -10,6 +10,8 @@ private:
     std::vector<Line> m_lines;
     // This pointer is shared between all Fractal_Elements for a given Fractal_Iterator
     std::vector<Line>* statics;
+
+    sf::VertexArray cached_vertices;
     // The place in statics to stop drawing lines. Lines past this point
     // were added by a later, more complicated FE.
     size_t m_statics_end;
@@ -27,7 +29,7 @@ public:
 
     Fractal_Element ReplaceAll(const Fractal_Template& target) const;
 
-    void Draw(sf::RenderTarget& target, Line::draw_type style) const;
+    void Draw(sf::RenderTarget& target, Line::draw_type style);
     void SetBase(sf::Vector2f start, sf::Vector2f finish);
 
     double BaseLength();

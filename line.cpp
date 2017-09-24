@@ -35,13 +35,24 @@ sf::Vector2f Line::FromOrigin() const {
 void Line::Draw(sf::RenderTarget& target, draw_type style) const {
     if(style == dt_default) {
         target.draw(m_body);
+    } else {
+        sf::VertexArray va(sf::PrimitiveType::Lines);
+        Draw(va, style);
+        target.draw(va);
+    }
+}
+
+void Line::Draw(sf::VertexArray& target, draw_type style) const {
+    if (style == dt_default) {
+        for (auto e = &m_body[0]; e - &m_body[0] < m_body.getVertexCount(); e++) {
+            target.append(*e);
+        }
     } else if (style == dt_simple) {
         if(m_type == lt_hidden || m_type == lt_base) {
             return; // Don't draw
         }
-        sf::Vertex simpleLine[] = {sf::Vertex(m_start, m_color),
-                                   sf::Vertex(m_finish, m_color)};
-        target.draw(simpleLine, 2, sf::Lines);
+        target.append(sf::Vertex(m_start, m_color));
+        target.append(sf::Vertex(m_finish, m_color));
     } else if (style == dt_overlay) {
         if(m_type == lt_hidden || m_type == lt_base) {
             return; // Don't draw
@@ -51,22 +62,20 @@ void Line::Draw(sf::RenderTarget& target, draw_type style) const {
         sf::Vector2f dist = m_finish - m_start;
         double length = sqrt(dist.x * dist.x + dist.y * dist.y);
         dist /= (float)length;
-        sf::VertexArray dotted_body;
-        dotted_body.setPrimitiveType(sf::Lines);
         sf::Vector2f dot = dist * (float)LINE_DOT_SIZE;
         sf::Vector2f loc = m_start;
         loc = m_start;
         int numDots = length / LINE_DOT_SIZE / 2;
-        for(int iii = 0; iii < numDots; iii++) { // Draw the dots along the line
-            dotted_body.append(sf::Vertex(loc, color));
-            dotted_body.append(sf::Vertex(loc + dot, color));
+        for (int iii = 0; iii < numDots; iii++) { // Draw the dots along the line
+            target.append(sf::Vertex(loc, color));
+            target.append(sf::Vertex(loc + dot, color));
             loc += dot * (float)2.0;
         }
-        dotted_body.append(sf::Vertex(loc, color));
-        dotted_body.append(sf::Vertex(m_finish, color));
-        target.draw(dotted_body);
+        target.append(sf::Vertex(loc, color));
+        target.append(sf::Vertex(m_finish, color));
     }
 }
+
 
 void Line::ConstructBody() {
     m_body.clear();

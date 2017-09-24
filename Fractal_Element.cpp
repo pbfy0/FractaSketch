@@ -5,7 +5,8 @@ Fractal_Element::Fractal_Element(std::vector<Line>* _statics):
      m_baseline(Line::lt_base, sf::Vector2f(0,0), sf::Vector2f(0,0)),
      statics(_statics),
      m_statics_end(_statics->size()),
-     m_maxLength(0)
+     m_maxLength(0),
+     cached_vertices(sf::PrimitiveType::Lines)
 {
 
 }
@@ -26,7 +27,7 @@ void Fractal_Element::AddLine(Line newLine) {
     switch (newLine.GetType()) {
     case Line::line_type::lt_hidden:
         // Hidden lines are useless for iteration, so don't keep track of them.
-        break;
+        return;
     case Line::line_type::lt_static:
         statics->push_back(newLine);
         m_statics_end++;
@@ -43,6 +44,7 @@ void Fractal_Element::AddLine(Line newLine) {
         }
         break;
     }
+    cached_vertices.clear();
 }
 
 const std::vector<Line>& Fractal_Element::GetLines() const {
@@ -62,15 +64,18 @@ Fractal_Element Fractal_Element::ReplaceAll(const Fractal_Template& target) cons
     return newFE;
 }
 
-void Fractal_Element::Draw(sf::RenderTarget& target, Line::draw_type style) const {
-    for(auto line_it = m_lines.begin(); line_it != m_lines.end(); line_it++) {
-        line_it->Draw(target, style);
+void Fractal_Element::Draw(sf::RenderTarget& target, Line::draw_type style) {
+    if (cached_vertices.getVertexCount() == 0) {
+        for (auto line_it = m_lines.begin(); line_it != m_lines.end(); line_it++) {
+            line_it->Draw(cached_vertices, style);
+        }
+        auto line_it = statics->begin();
+        for (size_t iii = 0; iii < m_statics_end; iii++) {
+            line_it->Draw(cached_vertices, style);
+            line_it++;
+        }
     }
-    auto line_it = statics->begin();
-    for(size_t iii = 0; iii < m_statics_end; iii++) {
-        line_it->Draw(target, style);
-        line_it++;
-    }
+    target.draw(cached_vertices);
 }
 
 void Fractal_Element::SetBase(sf::Vector2f start, sf::Vector2f finish) {

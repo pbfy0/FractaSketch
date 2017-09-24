@@ -70,6 +70,7 @@ public:
     Line ApplyTransform(Transform t) const;
 
     void Draw(sf::RenderTarget& target, draw_type style) const;
+    void Draw(sf::VertexArray& target, draw_type style) const;
 };
 
 
