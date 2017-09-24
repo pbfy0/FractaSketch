@@ -11,6 +11,8 @@ namespace config {
     float grid_hex_scale = 35.0;
 
     float infinity_stop_size = 3;
+
+    unsigned antialias_level = 0;
 }
 
 bool config::load_config() {
@@ -47,6 +49,21 @@ bool config::load_config() {
         std::string param = line.substr(0, eqloc);
         std::string value_str = line.substr(eqloc + 1, std::string::npos);
         std::istringstream iss(value_str);
+
+        if (param == "antialias_level") {
+            unsigned value;
+            if (!(iss >> value)) {
+                logging::AddToLog("Config Error: Value '" + value_str + "' is not an unsigned in line: " + original);
+                retval = false;
+                continue;
+            }
+
+            logging::AddToLog("Setting parameter " + param + " to value " + value_str);
+            antialias_level = value;
+            continue;
+        }
+
+
         float value;
 
         // Invalid value

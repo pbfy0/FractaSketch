@@ -10,3 +10,7 @@ grid_hex_scale = 35.0
 # Decreasing this will result in more detailed fractals, but they will be exponentially harder to 
 # compute and so will take much longer to display (if they don't run out of memory first)
 infinity_stop_size = 1.0
+
+# Antialiasing level (unsigned)
+# Higher values mean smoother lines, but slightly more gpu usage. 0 disables.
+antialias_level = 8

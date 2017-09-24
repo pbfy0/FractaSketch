@@ -5,8 +5,7 @@
 #include "utils.h"
 #include "constants.h"
 #include <algorithm>
-
-#include <algorithm>
+#include "config.h"
 
 #ifdef _WIN32
 #include <tchar.h>
@@ -24,7 +23,9 @@ Iter_Window::Iter_Window(sf::RenderWindow& window, sf::Font& font) :
     m_currentLevel(0)
 {
     if(!m_window.isOpen()) {
-        m_window.create(sf::VideoMode(1200, 724), "FractaSketch", sf::Style::Titlebar | sf::Style::Close);
+        sf::ContextSettings settings;
+        settings.antialiasingLevel = config::antialias_level;
+        m_window.create(sf::VideoMode(1200, 724), "FractaSketch", sf::Style::Titlebar | sf::Style::Close, settings);
         m_window.setPosition(sf::Vector2i(0, 0));
         m_input = InputBox(&window, &font, 110, 30, 300, 15, "File:");
         m_success = InputBox(&window, &font, 460, 30, 1000, 15, "");
@@ -138,8 +139,9 @@ void Iter_Window::Draw() {
 
 void Iter_Window::StartNewIteration(Fractal_Template base) {
     if(!m_window.isOpen()) {
-        m_window.create(sf::VideoMode(1200, 724), "FractaSketch", sf::Style::Titlebar | sf::Style::Close);
-        m_window.setPosition(sf::Vector2i(0, 0));
+        sf::ContextSettings settings;
+        settings.antialiasingLevel = config::antialias_level;
+        m_window.create(sf::VideoMode(1200, 724), "FractaSketch", sf::Style::Titlebar | sf::Style::Close, settings);
     }
     m_window.requestFocus();
     m_success.SetText("");
