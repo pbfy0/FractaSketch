@@ -32,7 +32,6 @@ int main() {
     sf::ContextSettings settings;
     settings.antialiasingLevel = config::antialias_level;
     sf::RenderWindow window(sf::VideoMode(1200, 724), "FractaSketch", sf::Style::Titlebar | sf::Style::Close, settings);
-    window.setVerticalSyncEnabled(true);
     window.setPosition(sf::Vector2i(0, 0));
 
     sf::RenderWindow iter_window;
