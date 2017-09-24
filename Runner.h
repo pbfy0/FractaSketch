@@ -37,8 +37,10 @@ public:
 
     void UpdateLineType(int newTypeButton);
 
-    void HandleEvents();
+    bool HandleEvent(const sf::Event &event);
+    bool HandleIterEvent(const sf::Event &event);
     void Draw();
+    void IterDraw();
 };
 
 #endif // RUNNER_H

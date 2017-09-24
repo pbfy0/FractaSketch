@@ -25,7 +25,7 @@ public:
     Iter_Window(sf::RenderWindow& window, sf::Font& font);
     ~Iter_Window();
 
-    void HandleEvents();
+    bool HandleEvent(const sf::Event &event);
     void Draw();
 
     void StartNewIteration(Fractal_Template base);

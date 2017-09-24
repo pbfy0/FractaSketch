@@ -56,10 +56,15 @@ Runner::~Runner() {
     }
 }
 
-void Runner::HandleEvents() {
-    m_iter_window.HandleEvents();
-    sf::Event event;
-    while(m_window.pollEvent(event)) {
+bool Runner::HandleIterEvent(const sf::Event &event) {
+    return m_iter_window.HandleEvent(event);
+}
+
+void Runner::IterDraw() {
+    m_iter_window.Draw();
+}
+
+bool Runner::HandleEvent(const sf::Event &event) {
     sf::Vector2f mousePos = sf::Vector2f(sf::Mouse::getPosition(m_window));
     switch(event.type) {
         case sf::Event::Closed:
@@ -102,6 +107,7 @@ void Runner::HandleEvents() {
                             m_grid.SetType((Grid::grid_type)(iii-6));
                         } else if(iii == 9) { // Draw
                             m_iter_window.StartNewIteration(m_base);
+                            m_iter_window.Draw();
                         } else if(iii == 10) { // Clear
                             m_base.Clear();
                             m_startedTemplate = false;
@@ -160,9 +166,9 @@ void Runner::HandleEvents() {
             if(event.mouseButton.button == sf::Mouse::Button::Left)
                 m_mouseHeld = false;
         default:
-            break;
+            return false;
         }
-    }
+    return true;
 }
 
 void Runner::Draw() {
@@ -181,8 +187,6 @@ void Runner::Draw() {
     m_base.Draw(m_window, Line::dt_default);
 
     m_window.display();
-
-    m_iter_window.Draw();
 }
 
 void Runner::UpdateLineType(int newTypeButton) {

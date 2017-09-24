@@ -38,10 +38,36 @@ int main() {
     sf::RenderWindow iter_window;
     Runner run(window, iter_window, inFont);
 
-    while(window.isOpen()) {
-        run.HandleEvents();
-        run.Draw();
+    run.Draw();
+
+    while (window.isOpen()) {
+        sf::Event ev;
+        if (iter_window.isOpen()) {
+            bool needs_redraw = false;
+            while (window.pollEvent(ev)) {
+                if (run.HandleEvent(ev)) needs_redraw = true;
+            }
+            if(needs_redraw) run.Draw();
+
+            bool iter_needs_redraw = false;
+            while (iter_window.pollEvent(ev)) {
+                if (run.HandleIterEvent(ev)) iter_needs_redraw = true;
+            }
+            if(iter_needs_redraw) run.IterDraw();
+
+            sf::sleep(sf::milliseconds(1000/60));
+        }
+        else {
+            if (window.waitEvent(ev)) {
+                bool needs_redraw = run.HandleEvent(ev);
+                while (window.pollEvent(ev)) {
+                    if (run.HandleEvent(ev)) needs_redraw = true;
+                }
+                if(needs_redraw) run.Draw();
+            }
+        }
     }
+
     iter_window.close();
     return 0;
 }

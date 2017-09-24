@@ -56,12 +56,10 @@ Iter_Window::~Iter_Window() {
     m_elements.clear();
 }
 
-void Iter_Window::HandleEvents() {
+bool Iter_Window::HandleEvent(const sf::Event &event) {
     if(!m_window.isOpen())
-        return;
-    sf::Event event;
-    while(m_window.pollEvent(event)) {
-        switch(event.type) {
+        return false;
+    switch(event.type) {
         case sf::Event::Closed:
             m_window.close();
             break;
@@ -115,9 +113,9 @@ void Iter_Window::HandleEvents() {
                 m_input.OnTextEntered(event.text.unicode);
             break;
         default:
-            break;
+            return false;
         }
-    }
+    return true;
 }
 
 void Iter_Window::Draw() {
