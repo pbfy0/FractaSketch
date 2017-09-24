@@ -1,7 +1,7 @@
 #include "Fractal_Element.h"
 #include "config.h"
 
-Fractal_Element::Fractal_Element(std::vector<Line>* _statics):
+Fractal_Element::Fractal_Element(frac_list<Line>* _statics):
      m_baseline(Line::lt_base, sf::Vector2f(0,0), sf::Vector2f(0,0)),
      statics(_statics),
      m_statics_end(_statics->size()),
@@ -47,7 +47,7 @@ void Fractal_Element::AddLine(Line newLine) {
     cached_vertices.clear();
 }
 
-const std::vector<Line>& Fractal_Element::GetLines() const {
+const frac_list<Line>& Fractal_Element::GetLines() const {
     return m_lines;
 }
 
@@ -55,7 +55,7 @@ Fractal_Element Fractal_Element::ReplaceAll(const Fractal_Template& target) cons
     Fractal_Element newFE(statics);
     for(auto line_it = m_lines.begin(); line_it != m_lines.end(); line_it++) {
         Fractal_Template transformed = target.TransformAll(target.MatchBase(*line_it));
-        std::vector<Line> transLines = transformed.GetLines();
+        frac_list<Line> transLines = transformed.GetLines();
         for(auto trans_it = transLines.begin(); trans_it != transLines.end(); trans_it++) {
             newFE.AddLine(*trans_it);
         }

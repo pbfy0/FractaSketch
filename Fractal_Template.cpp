@@ -17,7 +17,7 @@ Fractal_Template::~Fractal_Template() {
 
 }
 
-const std::vector<Line>& Fractal_Template::GetLines() const {
+const frac_list<Line>& Fractal_Template::GetLines() const {
     return m_lines;
 }
 

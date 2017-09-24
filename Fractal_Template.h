@@ -2,6 +2,7 @@
 #define FRACTAL_TEMPLATE_H
 
 #include <vector>
+#include "frac_list.h"
 #include "Line.h"
 
 
@@ -12,7 +13,7 @@ private:
     // endpoints correspond to more than one line. Thus for ease of access we
     // track them separately. The relationship is as follows:
     // m_lines[index] is the line from m_points[index] to m_points[index + 1]
-    std::vector<Line> m_lines;
+    frac_list<Line> m_lines;
     std::vector<sf::Vector2f> m_points;
     size_t m_activeLine;
     size_t m_activePoint;
@@ -29,7 +30,7 @@ public:
     Fractal_Template();
     ~Fractal_Template();
 
-    const std::vector<Line>& GetLines() const;
+    const frac_list<Line>& GetLines() const;
     const Line& GetBase() const;
 
     void OnClick(sf::Vector2f clickPos);

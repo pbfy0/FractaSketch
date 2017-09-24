@@ -9,7 +9,7 @@ private:
     Fractal_Template m_base;
     std::vector<Fractal_Element> m_levels;
     size_t m_currentLevel;
-    std::vector<Line> m_statics; // Shared by all Fractal_Elements in m_levels
+    frac_list<Line> m_statics; // Shared by all Fractal_Elements in m_levels
 
     void IterateTo(size_t level);
     void IterateToInfinity();
